@@ -1,0 +1,2 @@
+# Drizzle migrations will be generated here
+# Run: npx drizzle-kit generate:pg --schema=./packages/shared/src/schema.ts --out=./db/migrations

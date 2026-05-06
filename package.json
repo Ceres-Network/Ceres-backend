@@ -1,0 +1,29 @@
+{
+  "name": "ceres-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Off-chain backend services for Ceres Network parametric crop insurance protocol",
+  "workspaces": [
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "migrate": "tsx scripts/migrate.ts",
+    "backfill": "tsx scripts/backfill.ts",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "turbo": "^1.12.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

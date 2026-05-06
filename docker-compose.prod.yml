@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  api:
+    image: ghcr.io/ceres-network/api:latest
+    environment:
+      NODE_ENV: production
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+  indexer:
+    image: ghcr.io/ceres-network/indexer:latest
+    environment:
+      NODE_ENV: production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  oracle-feeder:
+    image: ghcr.io/ceres-network/oracle-feeder:latest
+    environment:
+      NODE_ENV: production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
