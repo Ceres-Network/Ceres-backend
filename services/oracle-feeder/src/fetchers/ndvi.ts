@@ -30,7 +30,7 @@ export class NdviFetcher implements WeatherFetcher {
         throw new Error(`NASA POWER API error: ${response.status} ${response.statusText}`);
       }
 
-      const data: NasaPowerResponse = await response.json();
+      const data = await response.json() as NasaPowerResponse;
       
       if (!data.properties?.parameter?.NDVI) {
         throw new Error('No NDVI data returned from NASA POWER');

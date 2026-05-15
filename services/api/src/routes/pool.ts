@@ -1,13 +1,13 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { poolEvents } from '@ceres/shared/schema';
-import { eq, and, desc, sql } from 'drizzle-orm';
+import { eq, desc, sql } from 'drizzle-orm';
 import { validateQuery } from '../middleware/validate';
 import { API_CONFIG, STROOPS_PER_USDC } from '@ceres/shared/constants';
 import { PoolEventTypeSchema } from '@ceres/shared/types';
 
-const router = Router();
+const router: RouterType = Router();
 
 router.get('/stats', async (req, res, next) => {
   try {
@@ -61,7 +61,7 @@ const listEventsSchema = z.object({
 
 router.get('/events', validateQuery(listEventsSchema), async (req, res, next) => {
   try {
-    const { type, page, limit } = req.query as z.infer<typeof listEventsSchema>;
+    const { type, page, limit } = req.query as unknown as z.infer<typeof listEventsSchema>;
     const offset = (page - 1) * limit;
 
     const whereClause = type ? eq(poolEvents.eventType, type) : undefined;

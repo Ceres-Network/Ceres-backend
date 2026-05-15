@@ -1,4 +1,4 @@
-import { SorobanRpc, xdr } from '@stellar/stellar-sdk';
+import { SorobanRpc } from '@stellar/stellar-sdk';
 import { STELLAR_CONFIG, CONTRACT_ADDRESSES, INDEXER_CONFIG } from '@ceres/shared/constants';
 import { db } from './db';
 import { indexerState } from '@ceres/shared/schema';
@@ -63,13 +63,14 @@ async function handleEvent(event: SorobanRpc.Api.EventResponse): Promise<void> {
     console.log(`[Listener] Processing event: ${eventName} from ${contractId}`);
 
     // Route to appropriate handler based on contract
-    if (contractId === CONTRACT_ADDRESSES.POLICY) {
+    const contractIdStr = contractId?.toString();
+    if (contractIdStr === CONTRACT_ADDRESSES.POLICY) {
       await handlePolicyEvent(eventName, event);
-    } else if (contractId === CONTRACT_ADDRESSES.POOL) {
+    } else if (contractIdStr === CONTRACT_ADDRESSES.POOL) {
       await handlePoolEvent(eventName, event);
-    } else if (contractId === CONTRACT_ADDRESSES.TRIGGER) {
+    } else if (contractIdStr === CONTRACT_ADDRESSES.TRIGGER) {
       await handleTriggerEvent(eventName, event);
-    } else if (contractId === CONTRACT_ADDRESSES.ORACLE) {
+    } else if (contractIdStr === CONTRACT_ADDRESSES.ORACLE) {
       // Oracle events are already written by the feeder, skip
       console.log('[Listener] Skipping oracle event (handled by feeder)');
     }

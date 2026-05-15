@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { payouts } from '@ceres/shared/schema';
@@ -6,7 +6,7 @@ import { eq, and, desc, sql } from 'drizzle-orm';
 import { validateQuery } from '../middleware/validate';
 import { API_CONFIG, STROOPS_PER_USDC } from '@ceres/shared/constants';
 
-const router = Router();
+const router: RouterType = Router();
 
 const listPayoutsSchema = z.object({
   farmer: z.string().optional(),
@@ -17,7 +17,7 @@ const listPayoutsSchema = z.object({
 
 router.get('/', validateQuery(listPayoutsSchema), async (req, res, next) => {
   try {
-    const { farmer, policy_id, page, limit } = req.query as z.infer<typeof listPayoutsSchema>;
+    const { farmer, policy_id, page, limit } = req.query as unknown as z.infer<typeof listPayoutsSchema>;
     const offset = (page - 1) * limit;
 
     const conditions = [];

@@ -1,12 +1,12 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { policies, payouts } from '@ceres/shared/schema';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { validateParams } from '../middleware/validate';
 import { STROOPS_PER_USDC } from '@ceres/shared/constants';
 
-const router = Router();
+const router: RouterType = Router();
 
 const farmerAddressSchema = z.object({
   address: z.string().length(56),

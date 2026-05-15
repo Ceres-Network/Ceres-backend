@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { policies, oracleReadings, payouts } from '@ceres/shared/schema';
@@ -7,7 +7,7 @@ import { validateQuery, validateParams } from '../middleware/validate';
 import { API_CONFIG, STROOPS_PER_USDC } from '@ceres/shared/constants';
 import { PolicyStatusSchema } from '@ceres/shared/types';
 
-const router = Router();
+const router: RouterType = Router();
 
 const listPoliciesSchema = z.object({
   farmer: z.string().optional(),
@@ -19,7 +19,7 @@ const listPoliciesSchema = z.object({
 
 router.get('/', validateQuery(listPoliciesSchema), async (req, res, next) => {
   try {
-    const { farmer, status, geohash, page, limit } = req.query as z.infer<typeof listPoliciesSchema>;
+    const { farmer, status, geohash, page, limit } = req.query as unknown as z.infer<typeof listPoliciesSchema>;
     const offset = (page - 1) * limit;
 
     const conditions = [];
@@ -66,7 +66,7 @@ const policyIdSchema = z.object({
 
 router.get('/:id', validateParams(policyIdSchema), async (req, res, next) => {
   try {
-    const { id } = req.params as z.infer<typeof policyIdSchema>;
+    const { id } = req.params as unknown as z.infer<typeof policyIdSchema>;
 
     const policy = await db
       .select()

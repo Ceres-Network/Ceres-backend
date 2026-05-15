@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SoilMoistureFetcher } from '../fetchers/soil';
-import { SOIL_MOISTURE_MULTIPLIER } from '@ceres/shared/constants';
 
 describe('SoilMoistureFetcher', () => {
   let fetcher: SoilMoistureFetcher;

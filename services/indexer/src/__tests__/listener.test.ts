@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 // Mock dependencies
 vi.mock('../db', () => ({
@@ -33,7 +33,7 @@ describe('Event Listener', () => {
   it('should resume from last indexed ledger', async () => {
     // Test that indexer resumes from correct ledger
     const { db } = await import('../db');
-    const result = await db.select().from({} as any).limit(1);
+    const result = await db.select().from({} as Record<string, unknown>).limit(1);
     
     expect(result).toHaveLength(1);
     expect(result[0].lastIndexedLedger).toBe(1000);

@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NdviFetcher } from '../fetchers/ndvi';
-import { NDVI_MULTIPLIER } from '@ceres/shared/constants';
 
 describe('NdviFetcher', () => {
   let fetcher: NdviFetcher;

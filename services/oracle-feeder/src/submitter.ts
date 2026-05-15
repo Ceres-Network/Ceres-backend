@@ -3,8 +3,6 @@ import {
   SorobanRpc,
   TransactionBuilder,
   Networks,
-  Operation,
-  Asset,
   xdr,
   Contract,
 } from '@stellar/stellar-sdk';

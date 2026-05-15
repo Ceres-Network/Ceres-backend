@@ -15,7 +15,7 @@ export function errorHandler(
   error: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) {
   console.error('[API] Error:', error);
 

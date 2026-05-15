@@ -33,7 +33,7 @@ export class ChirpsFetcher implements WeatherFetcher {
         throw new Error(`CHIRPS API error: ${response.status} ${response.statusText}`);
       }
 
-      const data: ChirpsResponse = await response.json();
+      const data = await response.json() as ChirpsResponse;
       
       if (!data.data || data.data.length === 0) {
         throw new Error('No rainfall data returned from CHIRPS');

@@ -13,9 +13,9 @@ describe('Geohash Utilities', () => {
     const coords = geohashDecode('u');
     
     expect(coords.latitude).toBeGreaterThan(45);
-    expect(coords.latitude).toBeLessThan(67.5);
+    expect(coords.latitude).toBeLessThanOrEqual(67.5);
     expect(coords.longitude).toBeGreaterThan(0);
-    expect(coords.longitude).toBeLessThan(22.5);
+    expect(coords.longitude).toBeLessThanOrEqual(22.5);
   });
 
   it('should throw error on invalid geohash character', () => {

@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ChirpsFetcher } from '../fetchers/chirps';
-import { RAINFALL_MULTIPLIER } from '@ceres/shared/constants';
 
 describe('ChirpsFetcher', () => {
   let fetcher: ChirpsFetcher;

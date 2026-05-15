@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { db } from '../db';
 import { indexerState, oracleSubmissions } from '@ceres/shared/schema';
 import { desc, eq } from 'drizzle-orm';
 import { SorobanRpc } from '@stellar/stellar-sdk';
 import { STELLAR_CONFIG } from '@ceres/shared/constants';
 
-const router = Router();
+const router: RouterType = Router();
 const server = new SorobanRpc.Server(STELLAR_CONFIG.RPC_URL);
 
 router.get('/', async (req, res, next) => {

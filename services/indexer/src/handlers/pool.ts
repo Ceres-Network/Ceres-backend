@@ -30,33 +30,86 @@ function decodeScVal(val: xdr.ScVal): unknown {
       return val.str().toString();
     case 'scvSymbol':
       return val.sym().toString();
-    case 'scvAddress':
-      return val.address().accountId().ed25519().toString('hex');
+    case 'scvAddress': {
+      const addr = val.address();
+      if (addr.switch().name === 'scAddressTypeAccount') {
+        return addr.accountId().ed25519().toString('hex');
+      }
+      return addr.contractId().toString('hex');
+    }
+    case 'scvMap': {
+      const map: Record<string, unknown> = {};
+      const entries = val.map() || [];
+      for (const entry of entries) {
+        const key = decodeScVal(entry.key());
+        const value = decodeScVal(entry.val());
+        if (typeof key === 'string') {
+          map[key] = value;
+        }
+      }
+      return map;
+    }
+    case 'scvVec': {
+      const vec = val.vec() || [];
+      return vec.map(v => decodeScVal(v));
+    }
     default:
       return null;
   }
+}
+
+async function decodeAddress(scVal: xdr.ScVal): Promise<string> {
+  if (scVal.switch().name === 'scvAddress') {
+    const addr = scVal.address();
+    if (addr.switch().name === 'scAddressTypeAccount') {
+      const publicKey = addr.accountId().ed25519();
+      const { StrKey } = await import('@stellar/stellar-sdk');
+      return StrKey.encodeEd25519PublicKey(publicKey);
+    }
+  }
+  throw new Error('Invalid address format');
 }
 
 export async function handlePoolEvent(
   eventName: string,
   event: SorobanRpc.Api.EventResponse
 ): Promise<void> {
+  // Extract ledger number from event
   const ledger = event.ledger;
-  const txHash = event.txHash;
+  // Extract tx hash from event ID (format: "ledger-txIndex-eventIndex")
+  const txHash = event.id.split('-')[0] + '-' + event.id.split('-')[1];
 
   if (eventName === 'DEPOSIT') {
     // Deposit event
     // Expected topics: [event_name, provider]
-    // Expected value: {amount, shares}
+    // Expected value: {amount, shares} or just amount
     
     if (event.topic.length < 2) {
       console.warn('[Pool Handler] DEPOSIT event missing provider topic');
       return;
     }
 
-    const provider = 'G' + Buffer.from(decodeScVal(event.topic[1]) as string, 'hex').toString('base64').substring(0, 56);
-    const amount = decodeScVal(event.value) as bigint || 0n;
-    const shares = 0n; // Decode from event value struct
+    let provider: string;
+    try {
+      provider = await decodeAddress(event.topic[1]);
+    } catch (error) {
+      console.error('[Pool Handler] Failed to decode provider address:', error);
+      return;
+    }
+
+    const valueData = decodeScVal(event.value);
+    let amount: bigint;
+    let shares: bigint | null = null;
+
+    if (typeof valueData === 'object' && valueData !== null) {
+      const data = valueData as Record<string, unknown>;
+      amount = typeof data.amount === 'bigint' ? data.amount : BigInt((data.amount as number) || 0);
+      shares = data.shares ? (typeof data.shares === 'bigint' ? data.shares : BigInt(data.shares as number)) : null;
+    } else if (typeof valueData === 'bigint') {
+      amount = valueData;
+    } else {
+      amount = BigInt((valueData as number) || 0);
+    }
 
     await db.insert(poolEvents).values({
       eventType: 'deposit',
@@ -78,9 +131,27 @@ export async function handlePoolEvent(
       return;
     }
 
-    const provider = 'G' + Buffer.from(decodeScVal(event.topic[1]) as string, 'hex').toString('base64').substring(0, 56);
-    const amount = decodeScVal(event.value) as bigint || 0n;
-    const shares = 0n; // Decode from event value struct
+    let provider: string;
+    try {
+      provider = await decodeAddress(event.topic[1]);
+    } catch (error) {
+      console.error('[Pool Handler] Failed to decode provider address:', error);
+      return;
+    }
+
+    const valueData = decodeScVal(event.value);
+    let amount: bigint;
+    let shares: bigint | null = null;
+
+    if (typeof valueData === 'object' && valueData !== null) {
+      const data = valueData as Record<string, unknown>;
+      amount = typeof data.amount === 'bigint' ? data.amount : BigInt((data.amount as number) || 0);
+      shares = data.shares ? (typeof data.shares === 'bigint' ? data.shares : BigInt(data.shares as number)) : null;
+    } else if (typeof valueData === 'bigint') {
+      amount = valueData;
+    } else {
+      amount = BigInt((valueData as number) || 0);
+    }
 
     await db.insert(poolEvents).values({
       eventType: 'withdraw',
@@ -103,7 +174,17 @@ export async function handlePoolEvent(
     }
 
     const policyId = Number(decodeScVal(event.topic[1]));
-    const amount = decodeScVal(event.value) as bigint || 0n;
+    const valueData = decodeScVal(event.value);
+    
+    let amount: bigint;
+    if (typeof valueData === 'object' && valueData !== null) {
+      const data = valueData as Record<string, unknown>;
+      amount = typeof data.amount === 'bigint' ? data.amount : BigInt((data.amount as number) || 0);
+    } else if (typeof valueData === 'bigint') {
+      amount = valueData;
+    } else {
+      amount = BigInt((valueData as number) || 0);
+    }
 
     await db.insert(poolEvents).values({
       eventType: 'payout',

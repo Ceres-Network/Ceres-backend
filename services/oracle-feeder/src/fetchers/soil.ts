@@ -28,7 +28,7 @@ export class SoilMoistureFetcher implements WeatherFetcher {
         throw new Error(`Open-Meteo API error: ${response.status} ${response.statusText}`);
       }
 
-      const data: OpenMeteoResponse = await response.json();
+      const data = await response.json() as OpenMeteoResponse;
       
       if (!data.hourly?.soil_moisture_0_to_1cm || data.hourly.soil_moisture_0_to_1cm.length === 0) {
         throw new Error('No soil moisture data returned from Open-Meteo');

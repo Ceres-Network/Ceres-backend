@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
 import { oracleReadings, oracleSubmissions } from '@ceres/shared/schema';
@@ -8,7 +8,7 @@ import { requireApiKey } from '../middleware/auth';
 import { API_CONFIG } from '@ceres/shared/constants';
 import { ReadingTypeSchema } from '@ceres/shared/types';
 
-const router = Router();
+const router: RouterType = Router();
 
 const readingsQuerySchema = z.object({
   geohash: z.string().min(1),
@@ -21,7 +21,7 @@ const readingsQuerySchema = z.object({
 
 router.get('/readings', validateQuery(readingsQuerySchema), async (req, res, next) => {
   try {
-    const { geohash, reading_type, from, to, page, limit } = req.query as z.infer<typeof readingsQuerySchema>;
+    const { geohash, reading_type, from, to, page, limit } = req.query as unknown as z.infer<typeof readingsQuerySchema>;
     const offset = (page - 1) * limit;
 
     const conditions = [
@@ -99,7 +99,7 @@ const submissionsQuerySchema = z.object({
 
 router.get('/submissions', requireApiKey, validateQuery(submissionsQuerySchema), async (req, res, next) => {
   try {
-    const { node, status, page, limit } = req.query as z.infer<typeof submissionsQuerySchema>;
+    const { status, page, limit } = req.query as unknown as z.infer<typeof submissionsQuerySchema>;
     const offset = (page - 1) * limit;
 
     const conditions = [];
