@@ -16,7 +16,7 @@ import type { WeatherFetcher, ReadingType } from '@ceres/shared/types';
 export class SoilMoistureFetcher implements WeatherFetcher {
   public readonly readingType: ReadingType = 'soil_moisture';
 
-  async fetchForCell(geohash: string): Promise<number> {
+  async fetchForCell(_geohash: string): Promise<number> {
     // TODO: Implement Open-Meteo API integration
     throw new Error('SoilMoistureFetcher not implemented yet');
   }

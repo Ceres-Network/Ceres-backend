@@ -31,7 +31,7 @@ const router: RouterType = Router();
  * @see https://github.com/ceres-network/ceres-backend/issues/XX
  */
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res, _next) => {
   // TODO: Implement health check
   res.status(501).json({ error: 'Not implemented yet' });
 });

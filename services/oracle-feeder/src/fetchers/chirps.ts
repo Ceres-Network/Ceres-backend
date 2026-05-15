@@ -16,7 +16,7 @@ import type { WeatherFetcher, ReadingType } from '@ceres/shared/types';
 export class ChirpsFetcher implements WeatherFetcher {
   public readonly readingType: ReadingType = 'rainfall';
 
-  async fetchForCell(geohash: string): Promise<number> {
+  async fetchForCell(_geohash: string): Promise<number> {
     // TODO: Implement CHIRPS API integration
     throw new Error('ChirpsFetcher not implemented yet');
   }

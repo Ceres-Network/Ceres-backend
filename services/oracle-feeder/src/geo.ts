@@ -15,7 +15,7 @@ import type { GeohashCoordinates } from '@ceres/shared/types';
  * 
  * @see https://github.com/ceres-network/ceres-backend/issues/XX
  */
-export function geohashDecode(geohash: string): GeohashCoordinates {
+export function geohashDecode(_geohash: string): GeohashCoordinates {
   // TODO: Implement geohash decoding algorithm
   throw new Error('geohashDecode not implemented yet');
 }

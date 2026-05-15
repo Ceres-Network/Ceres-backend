@@ -1,6 +1,6 @@
 import { SorobanRpc } from '@stellar/stellar-sdk';
-import { db } from '../db';
-import { poolEvents } from '@ceres/shared/schema';
+// import { db } from '../db';
+// import { poolEvents } from '@ceres/shared/schema';
 
 /**
  * TODO: Implement pool event handler
@@ -31,7 +31,7 @@ import { poolEvents } from '@ceres/shared/schema';
  */
 export async function handlePoolEvent(
   eventName: string,
-  event: SorobanRpc.Api.EventResponse
+  _event: SorobanRpc.Api.EventResponse
 ): Promise<void> {
   console.log(`[Pool Handler] Received ${eventName} event - not implemented yet`);
   // TODO: Implement pool event handling

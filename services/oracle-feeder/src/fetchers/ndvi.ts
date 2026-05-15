@@ -16,7 +16,7 @@ import type { WeatherFetcher, ReadingType } from '@ceres/shared/types';
 export class NdviFetcher implements WeatherFetcher {
   public readonly readingType: ReadingType = 'ndvi';
 
-  async fetchForCell(geohash: string): Promise<number> {
+  async fetchForCell(_geohash: string): Promise<number> {
     // TODO: Implement NASA POWER API integration
     throw new Error('NdviFetcher not implemented yet');
   }

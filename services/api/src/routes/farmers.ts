@@ -31,12 +31,12 @@ const router: RouterType = Router();
  * @see https://github.com/ceres-network/ceres-backend/issues/XX
  */
 
-router.get('/:address/policies', async (req, res, next) => {
+router.get('/:address/policies', async (req, res, _next) => {
   // TODO: Implement farmer policies endpoint
   res.status(501).json({ error: 'Not implemented yet' });
 });
 
-router.get('/:address/stats', async (req, res, next) => {
+router.get('/:address/stats', async (req, res, _next) => {
   // TODO: Implement farmer stats endpoint
   res.status(501).json({ error: 'Not implemented yet' });
 });

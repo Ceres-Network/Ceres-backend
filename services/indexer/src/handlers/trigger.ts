@@ -1,6 +1,6 @@
 import { SorobanRpc } from '@stellar/stellar-sdk';
-import { db } from '../db';
-import { payouts, policies } from '@ceres/shared/schema';
+// import { db } from '../db';
+// import { payouts, policies } from '@ceres/shared/schema';
 
 /**
  * TODO: Implement trigger event handler
@@ -38,7 +38,7 @@ import { payouts, policies } from '@ceres/shared/schema';
  */
 export async function handleTriggerEvent(
   eventName: string,
-  event: SorobanRpc.Api.EventResponse
+  _event: SorobanRpc.Api.EventResponse
 ): Promise<void> {
   console.log(`[Trigger Handler] Received ${eventName} event - not implemented yet`);
   // TODO: Implement trigger event handling

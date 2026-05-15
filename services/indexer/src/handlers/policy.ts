@@ -1,6 +1,6 @@
-import { SorobanRpc, xdr } from '@stellar/stellar-sdk';
-import { db } from '../db';
-import { policies } from '@ceres/shared/schema';
+import { SorobanRpc } from '@stellar/stellar-sdk';
+// import { db } from '../db';
+// import { policies } from '@ceres/shared/schema';
 
 /**
  * TODO: Implement policy event handler
@@ -25,7 +25,7 @@ import { policies } from '@ceres/shared/schema';
  */
 export async function handlePolicyEvent(
   eventName: string,
-  event: SorobanRpc.Api.EventResponse
+  _event: SorobanRpc.Api.EventResponse
 ): Promise<void> {
   console.log(`[Policy Handler] Received ${eventName} event - not implemented yet`);
   // TODO: Implement policy event handling

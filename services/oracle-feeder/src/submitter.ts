@@ -1,12 +1,13 @@
 import {
   Keypair,
   SorobanRpc,
-  TransactionBuilder,
   Networks,
-  xdr,
-  Contract,
+  // TransactionBuilder,
+  // xdr,
+  // Contract,
 } from '@stellar/stellar-sdk';
-import { ORACLE_NODE, STELLAR_CONFIG, CONTRACT_ADDRESSES } from '@ceres/shared/constants';
+import { ORACLE_NODE, STELLAR_CONFIG } from '@ceres/shared/constants';
+// import { CONTRACT_ADDRESSES } from '@ceres/shared/constants';
 import type { OracleSubmissionResult, ReadingType } from '@ceres/shared/types';
 
 const MAX_RETRIES = 3;
@@ -63,9 +64,9 @@ export class OracleSubmitter {
   }
 
   private async buildAndSubmitTransaction(
-    geohash: string,
-    readingType: ReadingType,
-    value: number
+    _geohash: string,
+    _readingType: ReadingType,
+    _value: number
   ): Promise<string> {
     /**
      * TODO: Implement Soroban transaction building and submission
