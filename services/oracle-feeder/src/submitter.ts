@@ -67,79 +67,26 @@ export class OracleSubmitter {
     readingType: ReadingType,
     value: number
   ): Promise<string> {
-    // Get account details
-    const account = await this.server.getAccount(this.keypair.publicKey());
-    
-    // Build contract invocation
-    const contract = new Contract(CONTRACT_ADDRESSES.ORACLE);
-    
-    // Convert parameters to XDR values
-    const geohashScVal = xdr.ScVal.scvString(geohash);
-    const readingTypeScVal = xdr.ScVal.scvString(readingType);
-    const valueScVal = xdr.ScVal.scvI128(
-      new xdr.Int128Parts({
-        hi: xdr.Int64.fromString('0'),
-        lo: xdr.Uint64.fromString(value.toString()),
-      })
-    );
-    const timestampScVal = xdr.ScVal.scvU64(
-      xdr.Uint64.fromString(Math.floor(Date.now() / 1000).toString())
-    );
-
-    // Build transaction
-    const transaction = new TransactionBuilder(account, {
-      fee: '100000',
-      networkPassphrase: this.networkPassphrase,
-    })
-      .addOperation(
-        contract.call(
-          'submit_reading',
-          geohashScVal,
-          readingTypeScVal,
-          valueScVal,
-          timestampScVal
-        )
-      )
-      .setTimeout(30)
-      .build();
-
-    // Simulate transaction
-    const simulated = await this.server.simulateTransaction(transaction);
-    
-    if (SorobanRpc.Api.isSimulationError(simulated)) {
-      throw new Error(`Simulation failed: ${simulated.error}`);
-    }
-
-    // Prepare and sign transaction
-    const prepared = SorobanRpc.assembleTransaction(transaction, simulated).build();
-    prepared.sign(this.keypair);
-
-    // Submit transaction
-    const response = await this.server.sendTransaction(prepared);
-    
-    if (response.status === 'ERROR') {
-      throw new Error(`Transaction failed: ${response.errorResult?.toXDR('base64')}`);
-    }
-
-    // Wait for confirmation
-    let getResponse = await this.server.getTransaction(response.hash);
-    let attempts = 0;
-    const maxAttempts = 20;
-
-    while (getResponse.status === 'NOT_FOUND' && attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      getResponse = await this.server.getTransaction(response.hash);
-      attempts++;
-    }
-
-    if (getResponse.status === 'NOT_FOUND') {
-      throw new Error('Transaction not found after polling');
-    }
-
-    if (getResponse.status === 'FAILED') {
-      throw new Error(`Transaction failed: ${getResponse.resultXdr?.toXDR('base64')}`);
-    }
-
-    return response.hash;
+    /**
+     * TODO: Implement Soroban transaction building and submission
+     * 
+     * Steps required:
+     * 1. Get oracle node account from Soroban RPC
+     * 2. Build contract invocation for oracle.submit_reading()
+     * 3. Convert parameters to XDR ScVal format:
+     *    - geohash: ScVal.scvString
+     *    - readingType: ScVal.scvString
+     *    - value: ScVal.scvI128
+     *    - timestamp: ScVal.scvU64
+     * 4. Simulate transaction to get resource fees
+     * 5. Assemble transaction with simulation results
+     * 6. Sign transaction with oracle keypair
+     * 7. Submit to Soroban RPC
+     * 8. Poll for confirmation (max 20 attempts, 1s interval)
+     * 9. Return transaction hash
+     * 
+     * @see https://github.com/ceres-network/ceres-backend/issues/XX
+     */
+    throw new Error('buildAndSubmitTransaction not implemented yet');
   }
 }

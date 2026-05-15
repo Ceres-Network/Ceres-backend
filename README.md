@@ -69,6 +69,7 @@ ceres-backend/
 - **Docker** and **Docker Compose**
 - **Funded Stellar testnet account** for oracle node (get testnet XLM from [Stellar Laboratory](https://laboratory.stellar.org/#account-creator))
 
+
 ## Quickstart
 
 ### 1. Clone and Install
@@ -337,7 +338,7 @@ Contributions welcome! Please open an issue or PR.
 
 ## Links
 
-- [Ceres Network Contracts](https://github.com/ceres-network/ceres-contracts)
-- [Ceres Network dApp](https://github.com/ceres-network/ceres-dapp)
+- [Ceres Network Contracts](https://github.com/Ceres-Network/Ceres-contracts)
+- [Ceres Network dApp](https://github.com/Ceres-Network/Ceres-Frontend)
 - [Stellar Documentation](https://developers.stellar.org/)
 - [Soroban Documentation](https://soroban.stellar.org/)

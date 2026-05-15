@@ -1,75 +1,44 @@
 import { Router, type Router as RouterType } from 'express';
-import { z } from 'zod';
-import { db } from '../db';
-import { policies, payouts } from '@ceres/shared/schema';
-import { eq } from 'drizzle-orm';
-import { validateParams } from '../middleware/validate';
-import { STROOPS_PER_USDC } from '@ceres/shared/constants';
 
 const router: RouterType = Router();
 
-const farmerAddressSchema = z.object({
-  address: z.string().length(56),
+/**
+ * TODO: Implement farmer-specific endpoints
+ * 
+ * Endpoints to implement:
+ * 
+ * 1. GET /farmers/:address/policies
+ *    - List all policies for a farmer
+ *    - Return policies with coverage amounts in USDC
+ *    - Validate address format (56 characters)
+ * 
+ * 2. GET /farmers/:address/stats
+ *    - Return farmer statistics:
+ *      - total_policies: number
+ *      - active_policies: number
+ *      - total_coverage_usdc: string
+ *      - total_payouts_received_usdc: string
+ *      - policies_triggered: number
+ *    - Query policies and payouts tables
+ *    - Convert stroops to USDC (divide by 10_000_000)
+ * 
+ * Requirements:
+ * - Use Zod for parameter validation
+ * - Use Drizzle ORM for database queries
+ * - Handle non-existent farmers gracefully
+ * - Return proper HTTP status codes
+ * 
+ * @see https://github.com/ceres-network/ceres-backend/issues/XX
+ */
+
+router.get('/:address/policies', async (req, res, next) => {
+  // TODO: Implement farmer policies endpoint
+  res.status(501).json({ error: 'Not implemented yet' });
 });
 
-router.get('/:address/policies', validateParams(farmerAddressSchema), async (req, res, next) => {
-  try {
-    const { address } = req.params as z.infer<typeof farmerAddressSchema>;
-
-    const farmerPolicies = await db
-      .select()
-      .from(policies)
-      .where(eq(policies.farmer, address));
-
-    res.json({
-      data: farmerPolicies.map(p => ({
-        ...p,
-        coverageAmountUsdc: (Number(p.coverageAmount) / Number(STROOPS_PER_USDC)).toFixed(2),
-        coverageAmountStroops: p.coverageAmount.toString(),
-      })),
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get('/:address/stats', validateParams(farmerAddressSchema), async (req, res, next) => {
-  try {
-    const { address } = req.params as z.infer<typeof farmerAddressSchema>;
-
-    const farmerPolicies = await db
-      .select()
-      .from(policies)
-      .where(eq(policies.farmer, address));
-
-    const activePolicies = farmerPolicies.filter(p => p.status === 'active');
-    const triggeredPolicies = farmerPolicies.filter(p => p.status === 'triggered');
-
-    const totalCoverage = farmerPolicies.reduce(
-      (sum, p) => sum + p.coverageAmount,
-      0n
-    );
-
-    const farmerPayouts = await db
-      .select()
-      .from(payouts)
-      .where(eq(payouts.farmer, address));
-
-    const totalPayouts = farmerPayouts.reduce(
-      (sum, p) => sum + p.amount,
-      0n
-    );
-
-    res.json({
-      total_policies: farmerPolicies.length,
-      active_policies: activePolicies.length,
-      total_coverage_usdc: (Number(totalCoverage) / Number(STROOPS_PER_USDC)).toFixed(2),
-      total_payouts_received_usdc: (Number(totalPayouts) / Number(STROOPS_PER_USDC)).toFixed(2),
-      policies_triggered: triggeredPolicies.length,
-    });
-  } catch (error) {
-    next(error);
-  }
+router.get('/:address/stats', async (req, res, next) => {
+  // TODO: Implement farmer stats endpoint
+  res.status(501).json({ error: 'Not implemented yet' });
 });
 
 export default router;
